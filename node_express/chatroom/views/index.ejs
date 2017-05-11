@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Epic button game</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script type ="text/javascript">
+        $(document).ready(function (){
+            var socket = io.connect();
+
+            $('form').submit(function(e){
+                socket.emit("posting_form", {message: $("#post").val()})
+                e.preventDefault();
+            })
+
+            $("#new-user").click(function(){
+                var user = prompt("Please enter your name:")
+                socket.emit("user", {name: user})
+                
+            })
+
+            socket.on('server_response', function (data){
+                // console.log(data.message.message)
+                if (data.name != "undefined") {
+                    $('#chat-room').append("<h4>"+data.name.name+" has joined..."+"</h4>")
+                    $('.users').append(data.name.name)                
+                }
+
+                if (data.message != "undefined") {
+                    console.log('message')
+                }
+
+                else{
+                    console.log("no")
+                }
+                // $('#chat-room').append("<h5>"+data.name.name+" : "+data.message.message+"</h5>")
+
+            });
+
+        
+        })
+        </script>
+
+		<style type="text/css">
+
+            *{
+                margin: 10px;
+                padding: 0px;
+            }
+
+            .container{
+                width: 400px;
+                text-align: center;
+            }
+            .users{
+                outline: 1px solid red;
+                width: 200px;
+                height: 200px;
+                float: right;
+                border: 3px solid black;
+                vertical-align: top;
+                margin-top:5px;
+            }
+
+            #user{
+                width: 100px;
+                height: 100px;
+                /*outline: 1px solid black;*/
+                background-color: yellow;
+            }
+
+            #chat-room{
+                height: 500px;
+                width: 500px;
+                border: 3px solid black;
+                display: inline-block;
+            }
+            #message{
+                width:500px;
+            }
+            .btn{
+                float: right;
+                margin-top:5px;
+            }
+
+		</style>
+
+	</head>
+
+	<body>
+        <div class="container">
+            <div id="user-add">
+                <button type="button" id="new-user" class="btn btn-primary btn-lg btn-block">Click here to join</button>          
+            </div>
+        </div>
+        <h1>Conversation board:</h1>
+
+        <div id="chat-room">
+            
+        </div>
+
+        <div class="users">
+                
+        </div>
+
+        <div id="message">
+            <form role="form" action="/users" method="post">
+                <input id="post" type="text" class="form-control" placeholder="Enter your message here">
+                <input type="submit" class="btn btn-info" value="Send">
+            </form>
+        </div>
+
+
+	</body>
+</html>
