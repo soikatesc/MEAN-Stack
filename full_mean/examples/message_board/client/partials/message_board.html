@@ -1,0 +1,63 @@
+
+<div class="container" ng-init="MC.index()">
+	<h1>The Dojo message board</h1><hr>
+	<div>
+		<form ng-submit="MC.createmessage(MC.newMessage)">
+	        <div class="form-group">
+	            <label for="user">
+	                <span class="label-text">Name:</span> 
+	            </label>
+	            <input ng-model="MC.newMessage.user" type="text" name="user" placeholder="Your name..." class="user form-control" id="user">
+	        </div>
+
+	         <div class="form-group">
+	            <label for="body">
+	                <span class="label-text">Message:</span> 
+	            </label>
+	            <textarea ng-model="MC.newMessage.body" class="body form-control" id="body" name="body" rows="3"></textarea>
+	            
+	        </div>
+
+	        <input type="submit" class="btn btn-lg btn-primary" value="Post a message">
+	    </form>
+    </div>
+    <div>
+    	<h2>Messages</h2>
+    	<hr>
+    	<div ng-repeat="message in MC.messages">
+    		<div>
+   				<h3>Name: {{message.user}}</h3> 
+   				<h3>Message: {{message.body}}</h3>
+   				{{message._id}}
+   			</div>	
+   			<div class="comments" ng-repeat="comment in message.comments">
+   				<h4>Name: {{comment.user}}</h4>
+   				<h4>Name: {{comment.comments}}</h4>
+   				<h4>Likes: {{comment.likes}}</h4>
+   				<a href="" class="btn btn-info active" role="button">Like</a>
+   				<hr>
+   			</div>	
+   			<div class="comments">
+   				 <form ng-submit="MC.createComment(MC.newComment)">
+                        <div class="form-group">
+                            <label for="user">
+                                <span class="label-text">Name:</span> 
+                            </label>
+                            <input ng-model="MC.newComment.user" type="text" name="user" placeholder="Your name..." class="user form-control" id="user">
+                        </div>
+
+                         <div class="form-group">
+                            <label for="comment">
+                                <span class="label-text">Comment:</span> 
+                            </label>
+                            <textarea ng-model="MC.newComment.comments" class="comment form-control" id="comment" name="comment" rows="3"></textarea>                                               </div>
+                        <input type="hidden" value="{{message._id}}" ng-model="MC.newComment.value" >
+                        <input type="submit" class="btn btn-lg btn btn-info" value="Post comment">
+                </form>
+   			</div>
+   			<hr>
+    	</div>
+
+    </div>
+
+</div>
